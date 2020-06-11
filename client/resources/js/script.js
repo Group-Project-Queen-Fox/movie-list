@@ -18,27 +18,28 @@ const auth = () => {
     }
 }
 
-const login = () => {
-    const email = $('.email-login').val()
-    const password = $('.email-password').val()
+const login = (event) => {
+    event.preventDefault()
+    const email = $('#email-login').val()
+    const password = $('#password-login').val()
 
     $.ajax({
         method: "post",
-        url: baseUrl + '/',
+        url: baseUrl + '/login',
         data: {
             email, password
         }
         
     })
-        .done(() => {
-            localStorage.setItem('access_token', 'test')
+        .done(data => {
+            localStorage.setItem('access_token', data.access_token)
             auth()
         })
         .fail(err => {
             $('.alert-login').empty()
             $('.alert-login').append(`
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>ERR!</strong> ${err.err_msg}
+                <strong>ERR!</strong> ${err.responseJSON.err_msg}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -48,13 +49,79 @@ const login = () => {
 
 }
 
+const logout = () => {
+    localStorage.clear()
+    auth()
+    $('#table-body').empty()
+}
+
+
+const register = (event) => {
+    event.preventDefault()
+    const email = $('#email-register').val()
+    const password = $('#password-register').val()
+    const confirm_password = $('#confirm-password-register').val()
+
+    
+    if (password != confirm_password) {
+        $('.alert-login').empty()
+        $('.alert-login').append(`
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Password doesn't match
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        `)
+        $('#email-register').val('')
+        $('#password-register').val('')
+        $('#confirm-password-register').val('')
+    } else {
+
+        $.ajax({
+            method: 'post',
+            url: `${baseUrl}/register`,
+            data: { email, password }
+        })
+            .done(() => {
+                $('.alert-login').empty()
+                $('.alert-login').append(`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        Successfully register new account
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `)
+                $('#email-register').val('')
+                $('#password-register').val('')
+                $('#confirm-password-register').val('')
+            })
+            .fail(err => {
+                $('.alert-login').empty()
+                $('.alert-login').append(`
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>ERR!</strong> ${err.responseJSON.err_msg}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                `)
+                $('#email-register').val('')
+                $('#password-register').val('')
+                $('#confirm-password-register').val('')
+            })
+    }
+
+}
+
 const search = (event) => {
     event.preventDefault()
-    const title = $('.search-title').val()
+    const title = $('#search-title').val()
 
     $.ajax({
         method: "post",
-        url: baseUrl + '/',
+        url: baseUrl + '/movie',
         headers: {
             access_token: localStorage.access_token
         },
@@ -63,26 +130,30 @@ const search = (event) => {
         }
     })
         .done(data => {
-            $('.table-body').empty()
+            $('#table-body').empty()
+            
             data.forEach((el,i) => {
-                $('.table-body').append(`
+                
+                $('#table-body').append(`   
                     <tr>
-                      <th scope="row">${i+1}</th>
-                      <td>${el.title}</td>
-                      <td>${el.details}</td>
-                      <td>
-                      <a onclick="getUrl('${el.title}')" href="#">Watch trailer >>></a>
+                      <th class="border-right text-center" scope="row">${i+1}</th>
+                      <td class="border-right">${el.title}</td>
+                      <td class="border-right text-center">${el.vote_average}</td>
+                      <td class="border-right text-center">${el.release_date}</td>
+                      <td class="text-center">
+                      <a onclick="trailer('${el.title}')" class="btn btn-info" href="#">Watch trailer >>></a>
                       </td>
                     </tr>
                 `)
-                
+               
             })
+            auth()
         })
         .fail(err => {
             $('.alert-movies').empty()
             $('.alert-movies').append(`
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>ERR!</strong> ${err.err_msg}
+                <strong>ERR!</strong> ${err.responseJSON.err_msg}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,10 +163,11 @@ const search = (event) => {
 }
 
 
-const getUrl = (title) => {
+const trailer = (title) => {
+    
     $.ajax({
-        method: "get",
-        url: baseUrl + '/',
+        method: "post",
+        url: baseUrl + '/trailer',
         headers: {
             access_token: localStorage.access_token
         },
@@ -108,7 +180,7 @@ const getUrl = (title) => {
             $('.alert-movies').empty()
             $('.alert-movies').append(`
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>ERR!</strong> ${err.err_msg}
+                <strong>ERR!</strong> ${err.responseJSON.err_msg}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
