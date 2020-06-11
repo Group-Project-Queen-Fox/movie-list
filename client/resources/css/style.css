@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+* {
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-image: linear-gradient(#0000007c, #0000007c), url('./img/background-min.jpg');
+    background-size: 100% 110%;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    height: 430px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}
+
+#search-title{
+    letter-spacing: 0;
+}

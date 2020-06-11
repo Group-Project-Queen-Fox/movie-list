@@ -4,8 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="./resources/css/style.css">
 </head>
 <body>
     
+    <header class="mb-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        User
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a onclick="logout()" class="dropdown-item" href="#">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        </div>
+                    </li>
+                    
+                </ul>
+                <form onsubmit="search(event)" class="form-inline my-2 my-lg-0">
+                    <input id="search-title" class="form-control mr-sm-2" type="search" placeholder="Search by Title" aria-label="Search">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+
+    <section class="section-login">
+        
+        <!--Modal: Login / Register Form-->
+        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    
+                    <!--Modal cascading tabs-->
+                    <div class="modal-c-tabs">
+            
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                            <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+                                Login</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+                                Register</a>
+                            </li>
+                        </ul>
+
+                        <div class="alert-login">
+                            
+                        </div>
+                
+                        <!-- Tab panels -->
+                        <div class="tab-content">
+                            <!--Panel 7-->
+                            <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                
+                                <form onsubmit="login(event)">
+                                    <!--Body-->
+                                    <div class="modal-body mb-1">
+                                        <div class="md-form form-sm mb-5">
+                                            <i class="fas fa-envelope prefix"></i>
+                                            <label data-error="wrong" data-success="right" for="modalLRInput10">Email</label>
+                                            <input type="email" id="email-login" class="form-control form-control-sm validate">
+                                        </div>
+                        
+                                        <div class="md-form form-sm mb-4">
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label data-error="wrong" data-success="right" for="modalLRInput11">Password</label>
+                                            <input type="password" id="password-login" class="form-control form-control-sm validate">
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <button type="submit" class="btn btn-info">Log in<i class="fas fa-sign-in ml-1"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                
+                            </div>
+                            <!--/.Panel 7-->
+                
+                            <!--Panel 8-->
+                            <div class="tab-pane fade" id="panel8" role="tabpanel">
+                
+                                <!--Body-->
+                                <div class="modal-body">
+                                    <form onsubmit="register(event)">
+
+                                        <div class="md-form form-sm mb-5">
+                                            <i class="fas fa-envelope prefix"></i>
+                                            <label data-error="wrong" data-success="right" for="modalLRInput12">Email</label>
+                                            <input type="email" id="email-register" class="form-control form-control-sm validate">
+                                        </div>
+                        
+                                        <div class="md-form form-sm mb-5">
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label data-error="wrong" data-success="right" for="modalLRInput13">Password</label>
+                                            <input type="password" id="password-register" class="form-control form-control-sm validate">
+                                        </div>
+                        
+                                        <div class="md-form form-sm mb-4">
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label data-error="wrong" data-success="right" for="modalLRInput14">Confirm password</label>
+                                            <input type="password" id="confirm-password-register" class="form-control form-control-sm validate">
+                                        </div>
+                        
+                                        <div class="text-center form-sm mt-2">
+                                            <button type="submit" class="btn btn-info">Sign up<i class="fas fa-sign-in ml-1"></i></button>
+                                        </div>
+                                    </form>
+                    
+                                </div>
+                            
+                            </div>
+                            <!--/.Panel 8-->
+                        </div>
+            
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+
+        <!--Modal: Login / Register Form-->
+  
+        <div class="d-flex flex-column align-items-center justify-content-center pt-5 container" style="height: 100vh;">
+
+            <div class="text-center">
+                <a href="" class="btn btn-light bg-secondary text-light btn-rounded btn-lg my-3" data-toggle="modal" data-target="#modalLRForm">Get Started</a>
+            </div>
+        </div>
+
+
+        
+    </section>
+
+
+    <section class="section-movies">
+        <div class="alert-movies">
+
+        </div>
+
+        <div class="container">
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                <table class="table table-bordered table-hover table-light mb-0">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th class="border-right text-center" scope="col">No</th>
+                      <th class="border-right" scope="col">Title</th>
+                      <th class="border-right text-center" scope="col">Rating</th>
+                      <th class="border-right text-center" scope="col">Released Date</th>
+                      <th class=" text-center" scope="col">Trailer</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-body">
+                        
+                  </tbody>
+                </table>
+              
+              </div>
+        </div>
+          
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="./resources/js/script.js"></script>
 </body>
 </html>
