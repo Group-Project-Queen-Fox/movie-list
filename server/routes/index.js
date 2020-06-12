@@ -4,6 +4,7 @@ const MovieApiController = require('../controllers/MovieApiController');
 const UserController = require('../controllers/UserController');
 
 router.post('/login', UserController.login);
+router.post('/oauth', UserController.googleSignIn);
 router.post('/register', UserController.register);
 
 router.use(authetication)

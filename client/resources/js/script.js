@@ -14,7 +14,6 @@ const auth = () => {
         $('header').hide()
         $('.section-login').show()
         $('.section-movies').hide()
-
     }
 }
 
@@ -53,6 +52,10 @@ const logout = () => {
     localStorage.clear()
     auth()
     $('#table-body').empty()
+    const auth2 = gapi.auth2.getAuthInstance()
+    auth2.signOut().then(() => {
+      console.log('User signed out.')
+    })
 }
 
 
@@ -188,3 +191,34 @@ const trailer = (title) => {
             `)
         })
 }
+
+
+
+
+function onSignIn(googleUser) {
+    const { id_token } = googleUser.getAuthResponse()
+
+    $.ajax({
+        method: "post",
+        url: baseUrl + '/oauth',
+        data: {
+            id_token
+        }
+    })
+        .done(({data}) => {
+            const { access_token } = data
+            localStorage.setItem('access_token', access_token)
+            auth()
+        })
+        .fail(err => {
+            $('.alert-login').empty()
+            $('.alert-login').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>ERR!</strong> ${err.responseJSON.err_msg}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            `)
+        })
+  }
