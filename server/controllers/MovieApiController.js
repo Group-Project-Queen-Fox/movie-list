@@ -31,11 +31,11 @@ class MovieApiController{
             }
         })
             .then((response)=>{
-                const {url} = response.data.items[0]
+                const { url } = response.data.items[0]
                 res.status(200).json({ url })
             })
             .catch((error)=>{
-                next({ str_code: 'INTERNAL_SERVER_ERROR' })
+                next({ str_code: error })
             })
     }
 
