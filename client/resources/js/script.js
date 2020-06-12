@@ -52,6 +52,7 @@ const logout = () => {
     localStorage.clear()
     auth()
     $('#table-body').empty()
+    $('#search-title').val('')
     const auth2 = gapi.auth2.getAuthInstance()
     auth2.signOut().then(() => {
       console.log('User signed out.')
@@ -102,7 +103,9 @@ const register = (event) => {
             })
             .fail(err => {
                 $('.alert-login').empty()
+                
                 $('.alert-login').append(`
+                
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>ERR!</strong> ${err.responseJSON.err_msg}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -206,6 +209,7 @@ function onSignIn(googleUser) {
         }
     })
         .done(({data}) => {
+            $('#modalLRForm').modal('hide')
             const { access_token } = data
             localStorage.setItem('access_token', access_token)
             auth()
