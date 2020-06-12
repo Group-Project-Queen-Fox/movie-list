@@ -138,13 +138,18 @@ const search = (event) => {
     })
         .done(data => {
             $('#table-body').empty()
-            
-            data.forEach((el,i) => {
+            // console.log(data)
+            data.movies.forEach((el,i) => {
                 
                 $('#table-body').append(`   
                     <tr>
                       <th class="border-right text-center" scope="row">${i+1}</th>
                       <td class="border-right">${el.title}</td>
+                      <td class="border-right">
+                        <a onclick="cast('${el.title}')" type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#exampleModal">
+                        Cast >>
+                        </a>
+                      </td>
                       <td class="border-right text-center">${el.vote_average}</td>
                       <td class="border-right text-center">${el.release_date}</td>
                       <td class="text-center">
@@ -167,6 +172,64 @@ const search = (event) => {
             </div>
             `)
         })
+}
+
+const cast = (title) => {
+    $.ajax({
+        method: "post",
+        url: baseUrl + '/cast',
+        headers: {
+            access_token: localStorage.access_token
+        },
+        data: {
+            title
+        }
+    })
+        .done(data => {
+            
+            let list = ''
+            data.cast.forEach(el => {
+                list += `<li>${el.actor} &emsp; AS &emsp;${el.character}</li>\n`
+            })
+
+            $('.cast-modal').append(`
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Casts of ${title}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            ${list}
+                        </ul/
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        
+                    </div>
+                    </div>
+                </div>
+                </div>
+            `)
+        })
+        .fail(err => {
+            $('.alert-movies').empty()
+            $('.alert-movies').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>ERR!</strong> ${err.responseJSON.err_msg}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            `)
+        })
+        
 }
 
 

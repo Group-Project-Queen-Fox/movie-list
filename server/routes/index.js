@@ -10,6 +10,7 @@ router.post('/register', UserController.register);
 router.use(authetication)
 router.post('/movie', MovieApiController.get);
 router.post('/trailer', MovieApiController.getUrl);
+router.post('/cast', MovieApiController.cast);
 
 
 module.exports = router;
