@@ -191,7 +191,7 @@ const cast = (title) => {
             data.cast.forEach(el => {
                 list += `<li>${el.actor} &emsp; AS &emsp;${el.character}</li>\n`
             })
-
+            $('.cast-modal').empty()
             $('.cast-modal').append(`
                 
                 <!-- Modal -->
