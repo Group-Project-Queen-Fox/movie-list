@@ -31,6 +31,7 @@ const login = (event) => {
         
     })
         .done(data => {
+            $('#modalLRForm').modal('hide')
             localStorage.setItem('access_token', data.access_token)
             auth()
         })
