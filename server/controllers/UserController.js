@@ -6,10 +6,12 @@ const { OAuth2Client } = require('google-auth-library')
 class UserController {
 
     static register(req,res,next) {
+        
         const newUser = {
             email: req.body.email,
             password: req.body.password
         }
+        
 
         User.findOne({
             where: {
@@ -20,18 +22,19 @@ class UserController {
                 if (data) {
                     next({ str_code: 'EMAIL_EXIST'})
                 } else {
-                    User.create(newUser)
-                        .then(() => {
-                            return res.status(201).json({ msg: 'Successfully created new user' })
-                        })
+                    return User.create(newUser)
                 }
+        
+            })
+            .then(() => {
+                return res.status(201).json({ msg: 'Successfully created new user' })
             })
             .catch(err => {
                 
                 if (err.errors) {
                     const err_data = err.errors.map(el => el.message)
                     next({ str_code: 'PASSWORD_FORMAT', err_data })
-
+                    
                 } else {
                     next({ str_code: 'INTERNAL_SERVER_ERROR'})
                 }
@@ -70,7 +73,6 @@ class UserController {
             next({ str_code: 'INTERNAL_SERVER_ERROR'})
         })
     }
-
 
     static googleSignIn(req,res,next) {
         const client = new OAuth2Client(process.env.CLIENT_ID)
